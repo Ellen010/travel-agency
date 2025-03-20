@@ -1,136 +1,212 @@
-*,
-*::before,
-*::after {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
+const cartContainer = document.getElementById("cart-container");
+const cruisesContainer = document.getElementById("cruises-container");
+const tripCards = document.getElementById("trip-card-container");
+const cartBtn = document.getElementById("cart-btn");
+const clearCartBtn = document.getElementById("clear-cart-btn");
+const totalNumberOfItems = document.getElementById("total-items");
+const cartSubTotal = document.getElementById("subtotal");
+const cartTaxes = document.getElementById("taxes");
+const cartTotal = document.getElementById("total");
+const showHideCartSpan = document.getElementById("show-hide-cart");
+let isCartShowing = false;
 
-:root {
-  --dark-grey: #1b1b32;
-  --grey:#A99F96;
-  --light-grey: #f5f6f7;
-  --black: #000;
-  --white: #fff;
-  --grey: #3b3b4f;
-  --golden-yellow: #fecc4c;
-  --yellow: #ffcc4c;
-  --gold: #feac32;
-  --orange: #ffac33;
-  --dark-orange: #f89808;
-  --pastel:#945D5E;
-  --siren:#37123C;
-  --peach: #DDA77B;
-}
+const trips = [
+  {
+    id: 1,
+    name: "Iberian Coast, Canary Islands & Madeira",
+    price: 1.159,
+    duration: 12,
+  },
+  {
+    id: 2,
+    name: "Northern Europe",
+    price: 389,
+    duration: 2,
+  },
+  {
+    id: 3,
+    name: "Mediterranean",
+    price: 549,
+    duration: 7,
+  },
+  {
+    id: 4,
+    name: "Caribbean",
+    price: 289,
+    duration: 4,
+  },
+  {
+    id: 5,
+    name: "Caribbean",
+    price: 1.919,
+    duration: 14,
+  },
+  {
+    id: 6,
+    name: "Dubai, Abu Dhabi & Qatar",
+    price: 699,
+    duration: 6,
+  },
+  {
+    id: 7,
+    name: "Dubai, Abu Dhabi & Qatar",
+    price: 889,
+    duration: 7,
+  },
+  {
+    id: 8,
+    name: "Asia",
+    price: 469,
+    duration: 4,
+  },
+  {
+    id: 9,
+    name: "Canary Islands and Madeira",
+    price: 649,
+    duration: 7,
+  },
+  {
+    id: 10,
+    name: "MSC Grand Voyages",
+    price: 1.259,
+    duration: 22,
+  },
+  {
+    id: 11,
+    name: "Panama Canal",
+    price: 2.918,
+    duration: 33,
+  },
+  {
+    id: 12,
+    name: "South Africa",
+    price: 199,
+    duration: 2,
+  },
+  {
+    id: 13,
+    name: "South Africa",
+    price: 479,
+    duration: 5,
+  },
+  {
+    id: 14,
+    name: "South America",
+    price: 443,
+    duration: 4,
+  },
+  {
+    id: 15,
+    name: "South America",
+    price: 1.549,
+    duration: 20,
+  }
+];
 
-body {
-  background-color: var(--grey);
-}
+trips.forEach(
+  ({ name, id, price, duration }) => {
+    tripCards.innerHTML += `
+      <div class="trip-card">
+        <h2>${name}</h2>
+        <p class="trip-price">£${price}</p>
+        <p class="trip-duration">Duration: ${duration}nights</p>
+        <button 
+          id="${id}" 
+          class="btn add-to-cart-btn">Add to cart
+        </button>
+      </div>
+    `;
+  }
+);
 
-.title {
-  color: var(--light-grey);
-  text-align: center;
-  margin: 50px auto;
-}
-
-#trip-card-container {
-  display: flex;
-  flex-direction: column;
-  flex-wrap: wrap;
-  align-items: center;
-}
-
-.trip-card {
-  background-color: var(--peach);
-  padding: 25px;
-  text-align: center;
-  border-radius: 30px;
-  margin: 20px 10px;
-}
-
-.trip-price {
-  font-size: 1.4rem;
-  margin:15px;
-  color:var(--white);
-  border:2px solid var(--siren);
-  border-radius:55px;
-}
-
-.btn {
-  display: block;
-  cursor: pointer;
-  width: 100px;
-  color: var(--dark-grey);
-  background-color: var(--gold);
-  background-image: linear-gradient(var(--golden-yellow), var(--orange));
-  border-color: var(--gold);
-  border-width: 3px;
-}
-
-.btn:hover {
-  background-image: linear-gradient(var(--yellow), var(--dark-orange));
-}
-
-#cart-btn {
-  position: absolute;
-  margin: 25px 20px; 
-  top: 0;
-  right: 0;
-  border-radius:12px;
-  padding:8px 10px;
-  background: var(--pastel);
-  border:2px solid var(--white);
-  color:white;
-}
-#cart-btn:hover {
-  background: var(--siren);
-  border:2px solid var(--white);
-  height:10%;
-  width:10%;
-}
-
-.add-to-cart-btn {
-  margin: 30px auto 10px;
-}
-
-#cart-container {
-  display: none;
-  position: absolute;
-  top: 60px;
-  right: 0;
-  background-color: var(--light-grey);
-  width: 200px;
-  height: 400px;
-  border: 15px double var(--black);
-  border-radius: 15px;
-  text-align: center;
-  font-size: 1.2rem;
-  overflow-y: scroll;
-}
-
-.cruise {
-  margin: 25px 0;
-}
-
-.cruise-count {
-  display: inline-block;
-  margin-right: 10px;
-}
-
-.cruise-duration {
-  margin: 10px 0;
-}
-
-@media (min-width: 768px) {
-  #trip-card-container {
-    flex-direction: row;
+class ShoppingCart {
+  constructor() {
+    this.items = [];
+    this.total = 0;
+    this.taxRate = 8.25;
   }
 
-  .trip-card {
-    flex: 1 0 21%;
+  addItem(id, trips) {
+    const trip = trips.find((item) => item.id === id);
+    const { name, price } = trip;
+    this.items.push(trip);
+
+    const totalCountPerCruise = {};
+    this.items.forEach((cruise) => {
+      totalCountPerProd[cruise.id] = (totalCountPerCruise[cruise.id] || 0) + 1;
+    })
+
+    const currentCruiseCount = totalCountPerCruise[cruise.id];
+    const currentCruiseCountSpan = document.getElementById(`cruise-count-for-id${id}`);
+
+    currentCruiseCount > 1 
+      ? currentCruiseCountSpan.textContent = `${currentCruiseCount}x`
+      : cruisesContainer.innerHTML += `
+      <div id="trip${id}" class="cruise">
+        <p>
+          <span class="cruise-count" id="cruise-count-for-id${id}"></span>${name}
+        </p>
+        <p>${price}</p>
+      </div>
+      `;
   }
 
-  #cart-container {
-    width: 300px;
+  getCounts() {
+    return this.items.length;
   }
-}
+
+  clearCart() {
+    if (!this.items.length) {
+      alert("Your shopping cart is already empty");
+      return;
+    }
+
+    const isCartCleared = confirm(
+      "Are you sure you want to clear all items from your shopping cart?"
+    );
+
+    if (isCartCleared) {
+      this.items = [];
+      this.total = 0;
+      cruisesContainer.innerHTML = "";
+      totalNumberOfItems.textContent = 0;
+      cartSubTotal.textContent = 0;
+      cartTaxes.textContent = 0;
+      cartTotal.textContent = 0;
+    }
+  }
+
+  calculateTaxes(amount) {
+    return parseFloat(((this.taxRate / 100) * amount).toFixed(2));
+  }
+
+  calculateTotal() {
+    const subTotal = this.items.reduce((total, item) => total + item.price, 0);
+    const tax = this.calculateTaxes(subTotal);
+    this.total = subTotal + tax;
+    cartSubTotal.textContent = `$${subTotal.toFixed(2)}`;
+    cartTaxes.textContent = `$${tax.toFixed(2)}`;
+    cartTotal.textContent = `$${this.total.toFixed(2)}`;
+    return this.total;
+  }
+};
+
+const cart = new ShoppingCart();
+const addToCartBtns = document.getElementsByClassName("add-to-cart-btn");
+
+[...addToCartBtns].forEach(
+  (btn) => {
+    btn.addEventListener("click", (event) => {
+      cart.addItem(Number(event.target.id), cruises);
+      totalNumberOfItems.textContent = cart.getCounts();
+      cart.calculateTotal();
+    })
+  }
+);
+
+cartBtn.addEventListener("click", () => {
+  isCartShowing = !isCartShowing;
+  showHideCartSpan.textContent = isCartShowing ? "Hide" : "Show";
+  cartContainer.style.display = isCartShowing ? "block" : "none";
+});
+
