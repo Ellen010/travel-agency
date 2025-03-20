@@ -106,9 +106,9 @@ const trips = [
 trips.forEach(
   ({ name, id, price, duration }) => {
     tripCards.innerHTML += `
-      <div class="cruise-card">
+      <div class="trip-card">
         <h2>${name}</h2>
-        <p class="cruise-price">£${price}</p>
+        <p class="trip-price">£${price}</p>
         <p class="trip-duration">Duration: ${duration}nights</p>
         <button 
           id="${id}" 
