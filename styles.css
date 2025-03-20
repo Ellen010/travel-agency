@@ -8,6 +8,7 @@
 
 :root {
   --dark-grey: #1b1b32;
+  --grey:#A99F96;
   --light-grey: #f5f6f7;
   --black: #000;
   --white: #fff;
@@ -17,16 +18,19 @@
   --gold: #feac32;
   --orange: #ffac33;
   --dark-orange: #f89808;
+  --pastel:#945D5E;
+  --siren:#37123C;
+  --peach: #DDA77B;
 }
 
 body {
-  background-color: var(--dark-grey);
+  background-color: var(--grey);
 }
 
 .title {
   color: var(--light-grey);
   text-align: center;
-  margin: 25px 0;
+  margin: 50px auto;
 }
 
 #trip-card-container {
@@ -37,15 +41,19 @@ body {
 }
 
 .trip-card {
-  background-color: var(--light-grey);
-  padding: 15px;
+  background-color: var(--peach);
+  padding: 25px;
   text-align: center;
-  border-radius: 15px;
+  border-radius: 30px;
   margin: 20px 10px;
 }
 
 .trip-price {
-  font-size: 1.2rem;
+  font-size: 1.4rem;
+  margin:15px;
+  color:var(--white);
+  border:2px solid var(--siren);
+  border-radius:55px;
 }
 
 .btn {
@@ -65,8 +73,20 @@ body {
 
 #cart-btn {
   position: absolute;
+  margin: 25px 20px; 
   top: 0;
   right: 0;
+  border-radius:12px;
+  padding:8px 10px;
+  background: var(--pastel);
+  border:2px solid var(--white);
+  color:white;
+}
+#cart-btn:hover {
+  background: var(--siren);
+  border:2px solid var(--white);
+  height:10%;
+  width:10%;
 }
 
 .add-to-cart-btn {
@@ -81,7 +101,7 @@ body {
   background-color: var(--light-grey);
   width: 200px;
   height: 400px;
-  border: 8px double var(--black);
+  border: 15px double var(--black);
   border-radius: 15px;
   text-align: center;
   font-size: 1.2rem;
