@@ -141,6 +141,10 @@ body {
     flex: 1 0 21%;
   }
 
+  .trip-duration {
+    color:var(--white);
+  }
+
   #cart-container {
     width: 300px;
   }
