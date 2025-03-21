@@ -5,7 +5,7 @@
 <p>- implementaion of methods for data manipulation,</p>
 <p>-ternary operator,</p>
 <p>- the spread operator,</p>
-<p> the this keyword, and more.</p>
+<p>-the this keyword, and more.</p>
 
 ![Capture d'écran 2025-03-21 152216](https://github.com/user-attachments/assets/4a924905-6095-44e9-9a75-9b63986fb6f4)
 
