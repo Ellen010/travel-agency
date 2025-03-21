@@ -143,6 +143,7 @@ body {
 
   .trip-duration {
     color:var(--white);
+    font-weight: heavy;
   }
 
   #cart-container {
