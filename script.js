@@ -110,7 +110,7 @@ trips.forEach(({ name, id, price, duration }, index) => {
     <div class="trip-card">
       <h2 style="color: ${nameColor};">${name}</h2>
       <p class="trip-price">£${price}</p>
-      <p class="trip-duration" style="white;">Duration: ${duration} nights</p>
+      <p class="trip-duration">Duration: ${duration} nights</p>
       <button id="trip-${id}" class="btn add-to-cart-btn">Add to cart</button>
     </div>
   `;
