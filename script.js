@@ -103,21 +103,18 @@ const trips = [
   }
 ];
 
-trips.forEach(
-  ({ name, id, price, duration }) => {
-    tripCards.innerHTML += `
-      <div class="trip-card">
-        <h2>${name}</h2>
-        <p class="trip-price">£${price}</p>
-        <p class="trip-duration">Duration: ${duration}nights</p>
-        <button 
-          id="${id}" 
-          class="btn add-to-cart-btn">Add to cart
-        </button>
-      </div>
-    `;
-  }
-);
+trips.forEach(({ name, id, price, duration }, index) => {
+  const nameColor = index % 2 === 0 ? "#7dfae9" : "#fee440"; 
+
+  tripCards.innerHTML += `
+    <div class="trip-card">
+      <h2 style="color: ${nameColor};">${name}</h2>
+      <p class="trip-price">£${price}</p>
+      <p class="trip-duration">Duration: ${duration} nights</p>
+      <button id="trip-${id}" class="btn add-to-cart-btn">Add to cart</button>
+    </div>
+  `;
+});
 
 class ShoppingCart {
   constructor() {
@@ -128,27 +125,33 @@ class ShoppingCart {
 
   addItem(id, trips) {
     const trip = trips.find((item) => item.id === id);
-    const { name, price } = trip;
+    if (!trip) return;
+
     this.items.push(trip);
 
     const totalCountPerCruise = {};
     this.items.forEach((cruise) => {
-      totalCountPerProd[cruise.id] = (totalCountPerCruise[cruise.id] || 0) + 1;
-    })
+      totalCountPerCruise[cruise.id] = (totalCountPerCruise[cruise.id] || 0) + 1;
+    });
 
-    const currentCruiseCount = totalCountPerCruise[cruise.id];
-    const currentCruiseCountSpan = document.getElementById(`cruise-count-for-id${id}`);
+    const currentCruiseCount = totalCountPerCruise[trip.id];
 
-    currentCruiseCount > 1 
-      ? currentCruiseCountSpan.textContent = `${currentCruiseCount}x`
-      : cruisesContainer.innerHTML += `
-      <div id="trip${id}" class="cruise">
-        <p>
-          <span class="cruise-count" id="cruise-count-for-id${id}"></span>${name}
-        </p>
-        <p>${price}</p>
-      </div>
+    let tripElement = document.getElementById(`cart-item-${id}`);
+    
+    if (!tripElement) {
+      cruisesContainer.innerHTML += `
+        <div id="cart-item-${id}" class="cruise">
+          <p>
+            <span class="cruise-count" id="cruise-count-for-id${id}">${currentCruiseCount}x</span> ${trip.name}
+          </p>
+          <p>£${trip.price.toFixed(2)}</p>
+        </div>
       `;
+    } else {
+      document.getElementById(`cruise-count-for-id${id}`).textContent = `${currentCruiseCount}x`;
+    }
+
+    this.calculateTotal();
   }
 
   getCounts() {
@@ -161,18 +164,15 @@ class ShoppingCart {
       return;
     }
 
-    const isCartCleared = confirm(
-      "Are you sure you want to clear all items from your shopping cart?"
-    );
-
+    const isCartCleared = confirm("Are you sure you want to clear all items from your shopping cart?");
     if (isCartCleared) {
       this.items = [];
       this.total = 0;
       cruisesContainer.innerHTML = "";
       totalNumberOfItems.textContent = 0;
-      cartSubTotal.textContent = 0;
-      cartTaxes.textContent = 0;
-      cartTotal.textContent = 0;
+      cartSubTotal.textContent = "$0";
+      cartTaxes.textContent = "$0";
+      cartTotal.textContent = "$0";
     }
   }
 
@@ -187,26 +187,28 @@ class ShoppingCart {
     cartSubTotal.textContent = `$${subTotal.toFixed(2)}`;
     cartTaxes.textContent = `$${tax.toFixed(2)}`;
     cartTotal.textContent = `$${this.total.toFixed(2)}`;
-    return this.total;
   }
-};
+}
 
 const cart = new ShoppingCart();
-const addToCartBtns = document.getElementsByClassName("add-to-cart-btn");
 
-[...addToCartBtns].forEach(
-  (btn) => {
+setTimeout(() => {
+  document.querySelectorAll(".add-to-cart-btn").forEach((btn) => {
     btn.addEventListener("click", (event) => {
-      cart.addItem(Number(event.target.id), cruises);
+      const tripId = Number(event.target.id.replace("trip-", ""));
+      cart.addItem(tripId, trips);
       totalNumberOfItems.textContent = cart.getCounts();
-      cart.calculateTotal();
-    })
-  }
-);
+    });
+  });
+}, 100);
 
 cartBtn.addEventListener("click", () => {
   isCartShowing = !isCartShowing;
   showHideCartSpan.textContent = isCartShowing ? "Hide" : "Show";
   cartContainer.style.display = isCartShowing ? "block" : "none";
+});
+
+clearCartBtn.addEventListener("click", () => {
+  cart.clearCart();
 });
 
