@@ -59,8 +59,8 @@ body {
   font-size: 1.4rem;
   margin:20px;
   color:var(--white);
-  padding:10px 5px 10px 5px;
-  border-radius:8px;
+  padding:5px;
+  border-radius:20px;
    box-shadow: 1px 1px 50px var(--dgrey); 
 }
 
