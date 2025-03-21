@@ -43,6 +43,7 @@ body {
   flex-wrap: wrap;
   align-items: center;
   margin:20px 40px 20px 40px;
+  
 }
 
 .trip-card {
@@ -51,6 +52,7 @@ body {
   text-align: center;
   border-radius: 30px;
   margin: 20px 10px;
+  border: 1px solid var(--golden-yellow);
 }
 
 .trip-price {
@@ -97,6 +99,9 @@ body {
 
 .add-to-cart-btn {
   margin: 30px auto 10px;
+  border-radius:15px;
+  padding:5px;
+  background-color: var(--peach);
 }
 
 #cart-container {
