@@ -7,12 +7,12 @@
 }
 
 :root {
-  --dark-grey: #1b1b32;
+  --dgrey: #1b1b32;
   --grey:#A99F96;
   --light-grey: #f5f6f7;
   --black: #000;
   --white: #fff;
-  --grey: #3b3b4f;
+  --mgrey: #3b3b4f;
   --golden-yellow: #fecc4c;
   --yellow: #ffcc4c;
   --gold: #feac32;
@@ -21,13 +21,17 @@
   --pastel:#945D5E;
   --siren:#37123C;
   --peach: #DDA77B;
+  --ppl: #71677C;
+  --tg: #A29893;
 }
 
 body {
-  background-color: var(--grey);
+  background-image: linear-gradient(var(--tg), var(--mgrey),var(--ppl), var(--dgrey));
+ );
 }
 
 .title {
+  font-size: 2rem;
   color: var(--light-grey);
   text-align: center;
   margin: 50px auto;
@@ -38,6 +42,7 @@ body {
   flex-direction: column;
   flex-wrap: wrap;
   align-items: center;
+  margin:20px 40px 20px 40px;
 }
 
 .trip-card {
@@ -50,17 +55,18 @@ body {
 
 .trip-price {
   font-size: 1.4rem;
-  margin:15px;
+  margin:20px;
   color:var(--white);
-  border:2px solid var(--siren);
-  border-radius:55px;
+  padding:10px 5px 10px 5px;
+  border-radius:20px;
+   box-shadow: 1px 1px 50px var(--dgrey); 
 }
 
 .btn {
   display: block;
   cursor: pointer;
   width: 100px;
-  color: var(--dark-grey);
+  color: var(--dgrey);
   background-color: var(--gold);
   background-image: linear-gradient(var(--golden-yellow), var(--orange));
   border-color: var(--gold);
